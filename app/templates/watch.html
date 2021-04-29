@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" id="main-container">
+    <div style="display: flex; justify-content: center;">
+        <h1 class="heading">Live Feed</h1>
+    </div>
+    <form id='filter-form'>
+        <article class="card-group-item">
+            <header class="card-header">
+                <h6 class="title" style="text-align: left;">Filter Results</h6>
+                <div class="filter-content">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-6 text-right">
+                                <input type="number" name="limit" class="form-control" placeholder="Number of results to show">
+                            </div>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input active" type="radio" name="sort" id="inlineRadio1" value="latest">
+                                    <label class="form-check-label" for="inlineRadio1">Latest</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="sort" id="inlineRadio2" value="oldest">
+                                    <label class="form-check-label" for="inlineRadio2">Oldest</label>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-outline-success btn" onclick="fetch_data()">Filter</button>
+                            </div>
+                        </div>
+                    </div> <!-- card-body.// -->
+                </div>
+            </header>
+        </article>
+
+    </form>
+    <div id='data-table'>
+        {% with headers=headers, table=table, last_update=last_update %}
+            {% include 'table.html' %}
+        {% endwith %}
+    </div>
+
+    <script>
+        
+        setInterval(fetch_data, 10000);
+
+        function get_form_values() {
+            limit = document.getElementsByName('limit')[0].value;
+            sort = document.getElementsByName('sort');
+            if (sort[0].checked) {
+                sort = sort[0].value
+            }
+            else {
+                sort = sort[1].value
+            }
+        }
+
+
+        function extract_form() {
+            limit = document.getElementsByName('limit')[0].value;
+            sort = document.getElementsByName('sort');
+            
+            if (sort[0].checked) {
+                sort = sort[0].value;
+            } else if (sort[1].checked) {
+                sort = sort[1].value;
+            } else {
+                sort = 'latest'
+            }
+
+            if (limit == '') {
+                limit = 20;
+            }
+
+
+            return {
+                "limit": limit,
+                "sort": sort
+            }
+        }
+
+
+        function fetch_data() {
+            console.log("Interval")
+            $.ajax({
+                type: "POST",
+                url: 'market_watch',
+                data: extract_form(),
+                success: function(data){
+                    // alert(data)
+                    document.getElementById('data-table').innerHTML = data
+                }
+            });
+        }
+    
+    </script>
+</div>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="margin-bottom: 50px;">
+    <div style="display: flex; justify-content: center;">
+        <h1>Manager Orders</h1>
+    </div>
+    <div style="display: flex; justify-content: center;">
+        <ul class="nav nav-tabs" style=" width: 100%;">
+            <li class="nav-item" style=" width: 50%; text-align: center;">
+                <a href="#orders" class="nav-link active" data-toggle="tab">Orders</a>
+            </li>
+            <li class="nav-item" style=" width: 50%; text-align: center;">
+                <a href="#create-order" class="nav-link" data-toggle="tab">Create Order</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="tab-content">
+        
+        <div class="tab-pane fade show active" id="orders">
+            <h3 class="mt-2" style="margin: 35px;"><strong>Active Orders</strong></h3>
+            <h4 class="mt-2" style="margin: 20px;">{{ msg }}</h4>
+            {% for table in tables %}
+                <div style="margin-bottom: 70px;">
+                    {% set order_id = table[0]['value'] %}
+                    <p class="text-left" style="margin: 5px;">Order # {{ order_id }}</p>
+                    <table class="table table-bordered">
+                        <tbody>
+                            {% for row in table %}
+                                {% if row.key != 'ID' %}
+                                    <tr>
+                                        <th style="text-align: right; width: 50%;">{{row.key}}</th>
+                                        <td style="text-align: left; width: 50%;">{{row.value}}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            <tr>
+                                <td colspan="2">
+                                    <button type="button" class="btn btn-danger" style="width: 100%;" onclick="cancel_order( '{{ order_id }}' )">
+                                        Cancel Order
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="tab-pane fade" id="create-order">
+            <h3 class="mt-2" style="margin: 35px;"><strong>Place Order</strong></h3>
+            <form action="/orders", method="POST">
+                <article class="card-group-item">
+                    <header class="card-header">
+                        <h6 class="title" style="text-align: left;">Order Details</h6>
+                    </header>
+                    <div class="filter-content">
+                        <div class="card-body">
+                        <div class="form-row">
+                        <div class="form-group col-md-6 text-left">
+                            <label>Symbol</label>
+                            <input type="text" name="symbol" class="form-control" id="inputEmail4" placeholder="MSFT">
+                        </div>
+                        <div class="form-group col-md-6 text-right">
+                            <label>Qty</label>
+                            <input type="number" name="qty" class="form-control" placeholder="1,0000">
+                        </div>
+                        </div>
+                        </div> <!-- card-body.// -->
+                    </div>
+                </article> <!-- card-group-item.// -->
+                <article class="card-group-item">
+                    <header class="card-header">
+                        <h6 class="title"  style="text-align: left;">Side Selection </h6>
+                    </header>
+                    <div class="filter-content">
+                        <div class="card-body">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input active" type="radio" name="side" id="inlineRadio1" value="buy">
+                                <label class="form-check-label" for="inlineRadio1">Buy</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="side" id="inlineRadio2" value="sell">
+                                <label class="form-check-label" for="inlineRadio2">Sell</label>
+                            </div>
+                        </div> <!-- card-body.// -->
+                    </div>
+                </article> <!-- card-group-item.// -->
+                
+                <article class="card-group-item">
+                    <header class="card-header">
+                        <h6 class="title"  style="text-align: left;">Order Specifications </h6>
+                    </header>
+                    <div class="filter-content">
+                        <div class="card-body">
+                        <div class="form-row">
+                        <div class="form-group col-md-6  text-left">
+                            <label>Order Type</label>
+                            <select class="form-control" id="inputEmail4" name="type">
+                                <option>Market</option>
+                                <option>Limit</option>
+                                <option>Stop</option>
+                                <option>Stop Limit</option>
+                                <option>Trailing Stop</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 text-right">
+                            <label>Time In Force</label>
+                            <select class="form-control" id="inputEmail4" name="time_in_force">
+                                <option>Day</option>
+                                <option>GTC</option>
+                                <option>OPG</option>
+                                <option>CLS</option>
+                                <option>IOS</option>
+                                <option>FOK</option>
+                            </select>
+                        </div>
+                        </div>
+                        </div> <!-- card-body.// -->
+                    </div>
+                </article> <!-- card-group-item.// -->
+                <button type="submit" class="btn btn-outline-success btn-lg btn-block">Create Order</button>
+            </form>
+        </div>
+
+    </div>
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div style="display: flex; justify-content: center;">
+        <h1>Account Details</h1>
+    </div>
+    <div>
+        <table class="table table-bordered">
+            <tbody>
+            {% for key, value in details.items() %}
+                <tr>
+                    <th style="text-align: right; width: 50%;">{{key}}</th>
+                    <td style="text-align: left; width: 50%;">{{value}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

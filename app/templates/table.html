@@ -1,0 +1,23 @@
+<table class="table table-sm table-dark">
+    <thead>
+        <tr>
+            <th scope="col"><strong>##</strong></th>
+            {% for header in headers %}
+                <th scope="col">
+                    {{ header }}
+                </th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in table %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th>
+                {% for cell in row %}
+                    <td>{{cell}}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h6 class="title" style="text-align: right; font-style: italic;"><em>Last Updated: {{ last_update }}</em></h6>
