@@ -17,11 +17,10 @@ class Stream:
     __instance__ = None
 
     @classmethod
-    def get_stream(cls):
-        if cls.__instance__ is None:
-            cls.__instance__ = cls()
-
-        return cls.__instance__
+    def is_alive(cls):
+        if cls.__instance__ is not None:
+            return True
+        return False
 
     def __init__(self):
         self.ws = websocket.WebSocketApp(
@@ -37,10 +36,11 @@ class Stream:
 
     def on_error(self, ws, error):
         print(error)
+        Stream.__instance__ = None
 
     def on_close(self, ws):
         print("### closed ###")
-        restart()
+        Stream.__instance__ = None
 
     def on_open(self, ws):
         ws.send(json.dumps(config.WS_AUTH))
@@ -48,27 +48,16 @@ class Stream:
 
     def on_message(self, ws, message):
         print("recieved a msg")
-        failed = record.write_bar(json.loads(message))
-
-        if failed:
-            time.sleep(60)
+        record.write_bar(json.loads(message))
 
 
 def start_streamer():
     print("## starting streamer!")
-    Stream.get_stream()
-    Stream.__instance__.start()
 
-def restart():
-    print("## going to sleep")
-    time.sleep(1)
+    if Stream.is_alive():
+        return
 
-    print("## collecting garbage")
-    Stream.__instance__ = None
-    time.sleep(60)
-
-    start_streamer()
-    
+    Stream().start()
 
 
 if __name__ == "__main__":

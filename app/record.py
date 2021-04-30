@@ -26,7 +26,6 @@ HEADER=[
 
 def write_bar(res):
 
-    failed = False
     data = res.get("data")
     stream_type = res.get("stream")
 
@@ -55,12 +54,9 @@ def write_bar(res):
         )
 
     else:
-        if data.get('error') or data.get('status') == 'unauthorized':
-            failed = True
-            msg = f"Recieved Other Message:\n {res}"
+        msg = f"Recieved Other Message:\n {res}"
     
     print(msg)
-    return failed
 
 def write(bar):
     try:

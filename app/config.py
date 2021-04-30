@@ -2,7 +2,9 @@ class Config(object):
     JOBS = [
         {
             'id': 'job-1',
-            'func': 'jobs:streamer'
+            'func': 'jobs:streamer',
+            'trigger': 'interval',
+            "seconds": 10,
         }
     ]
 
