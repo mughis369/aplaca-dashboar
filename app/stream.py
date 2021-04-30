@@ -19,6 +19,7 @@ class Stream:
 
     @classmethod
     def is_alive(cls):
+        print("is alive: ", cls.__instance__)
         if cls.__instance__ is not None:
             return True
         return False
