@@ -1,6 +1,6 @@
 import csv
-import os.path
-import utils
+import os
+from app import utils
 from datetime import datetime
 
 
@@ -28,6 +28,8 @@ def write_bar(res):
 
     data = res.get("data")
     stream_type = res.get("stream")
+
+    perform_write_check()
 
     if stream_type not in ['authorization', 'listening']:
         msg = f"Recieved Data:\n {res}"
@@ -65,11 +67,15 @@ def write(bar):
     except Exception as ex:
         print(f"Error occured while writing to csv: {ex}")
 
+def perform_write_check():
+    if not os.path.isfile(FILE):
+        with open(FILE, 'a') as csv_file:
+            pass
 
 def read(limit=None, sort=None):
     selected_records = []
     try:
-        with open('market_data.csv', 'r') as csv_file:
+        with open(FILE, 'r') as csv_file:
             records = list(csv.reader(csv_file, delimiter=','))
 
             print(sort, limit)

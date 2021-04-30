@@ -2,8 +2,7 @@ class Config(object):
     JOBS = [
         {
             'id': 'job-1',
-            'func': 'app:streamer'
-
+            'func': 'wsgi:streamer'
         }
     ]
 

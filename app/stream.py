@@ -2,8 +2,7 @@
 
 import json
 import websocket
-import config
-import record
+from app import config, record
 import time
 try:
     import thread

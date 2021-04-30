@@ -1,6 +1,4 @@
-import api
-import config
-import record
+from app import api, config, record
 import os
 from werkzeug.datastructures import ImmutableMultiDict
 import json

@@ -1,6 +1,6 @@
 import requests
 import json
-from config import ORDERS_URL, HEADERS, ACCOUNT_URL
+from app import config
 
 
 def create_order(symbol, qty, side='buy', type='market', time_in_force='gtc'):
@@ -19,7 +19,7 @@ def create_order(symbol, qty, side='buy', type='market', time_in_force='gtc'):
         "type": type,
         "time_in_force": time_in_force
     }
-    r = requests.post(ORDERS_URL, headers=HEADERS, json=data)
+    r = requests.post(config.ORDERS_URL, headers=config.HEADERS, json=data)
     return json.loads(r.content)
 
 def get_orders(order_id=None):
@@ -27,30 +27,30 @@ def get_orders(order_id=None):
     Retrieves a list of orders for the account, filtered by the supplied id.
     returns all orders if order_id is None
     """
-    URL = ORDERS_URL
+    URL = config.ORDERS_URL
 
     if order_id:
-        URL = f"{ORDERS_URL}/{order_id}"
+        URL = f"{config.ORDERS_URL}/{order_id}"
 
-    r = requests.get(f"{URL}", headers=HEADERS)
+    r = requests.get(f"{URL}", headers=config.HEADERS)
     return json.loads(r.content)
 
 def cancel_orders(order_id=None):
     """
     Attempts to cancel all open orders or a specific if order_id is provided.
     """
-    URL = ORDERS_URL
+    URL = config.ORDERS_URL
 
     if order_id:
-        URL = f"{ORDERS_URL}/{order_id}"
+        URL = f"{config.ORDERS_URL}/{order_id}"
 
-    r = requests.delete(f"{URL}", headers=HEADERS)
+    r = requests.delete(f"{URL}", headers=config.HEADERS)
     return r.content
 
 
 def get_account():
     """ Returns the account associated with the API key."""
-    r = requests.get(ACCOUNT_URL, headers=HEADERS)
+    r = requests.get(config.ACCOUNT_URL, headers=config.HEADERS)
     return json.loads(r.content)
 
 
