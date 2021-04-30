@@ -4,7 +4,7 @@ class Config(object):
             'id': 'job-1',
             'func': 'jobs:streamer',
             'trigger': 'interval',
-            "seconds": 60,
+            "seconds": 10,
         }
     ]
 

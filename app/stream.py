@@ -36,13 +36,12 @@ class Stream:
         self.ws.run_forever()
 
     def on_error(self, ws, error):
-        print("err: ", error)
-        Stream.__instance__ = None
+        print(error)
+        del self
 
     def on_close(self, ws):
         print("### closed ###")
-        Stream.__instance__ = None
-        Stream.__authorized__ = False
+        del self
 
     def on_open(self, ws):
         if not Stream.__authorized__:
