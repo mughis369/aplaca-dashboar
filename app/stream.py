@@ -15,6 +15,7 @@ import time
 class Stream:
 
     __instance__ = None
+    __authorized__ = False
 
     @classmethod
     def is_alive(cls):
@@ -35,20 +36,23 @@ class Stream:
         self.ws.run_forever()
 
     def on_error(self, ws, error):
-        print(error)
+        print("err: ", error)
         Stream.__instance__ = None
 
     def on_close(self, ws):
         print("### closed ###")
         Stream.__instance__ = None
+        Stream.__authorized__ = False
 
     def on_open(self, ws):
-        ws.send(json.dumps(config.WS_AUTH))
+        if not Stream.__authorized__:
+            ws.send(json.dumps(config.WS_AUTH))
+    
         ws.send(json.dumps(config.WS_LISTEN))
 
     def on_message(self, ws, message):
         print("recieved a msg")
-        record.write_bar(json.loads(message))
+        Stream.__authorized__ = record.write_bar(json.loads(message))
 
 
 def start_streamer():
@@ -56,8 +60,8 @@ def start_streamer():
 
     if Stream.is_alive():
         return
-
-    Stream().start()
+    else:
+        Stream().start()
 
 
 if __name__ == "__main__":
