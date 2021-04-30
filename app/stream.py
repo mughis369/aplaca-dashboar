@@ -48,7 +48,10 @@ class Stream:
 
     def on_message(self, ws, message):
         print("recieved a msg")
-        record.write_bar(json.loads(message))
+        failed = record.write_bar(json.loads(message))
+
+        if failed:
+            time.sleep(60)
 
 
 def start_streamer():
@@ -62,7 +65,7 @@ def restart():
 
     print("## collecting garbage")
     Stream.__instance__ = None
-    time.sleep(1)
+    time.sleep(60)
 
     start_streamer()
     

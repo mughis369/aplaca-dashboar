@@ -26,6 +26,7 @@ HEADER=[
 
 def write_bar(res):
 
+    failed = False
     data = res.get("data")
     stream_type = res.get("stream")
 
@@ -33,7 +34,7 @@ def write_bar(res):
 
     if stream_type not in ['authorization', 'listening']:
         msg = f"Recieved Data:\n {res}"
-
+        
         write( 
             [
                 data.get("ev", None),
@@ -54,9 +55,12 @@ def write_bar(res):
         )
 
     else:
-        msg = f"Recieved Other Message:\n {res}"
+        if data.get('error') or data.get('status') == 'unauthorized':
+            failed = True
+            msg = f"Recieved Other Message:\n {res}"
     
     print(msg)
+    return failed
 
 def write(bar):
     try:
