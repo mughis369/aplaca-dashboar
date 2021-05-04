@@ -26,45 +26,30 @@ HEADER=[
 
 def write_bar(res):
 
-    msg = ""
-    authorized = False
     data = res.get("data")
     stream_type = res.get("stream")
 
     perform_write_check()
 
-    if stream_type not in ['authorization', 'listening']:
-        msg = f"Recieved Data:\n {res}"
-        authorized = True
-        write( 
-            [
-                data.get("ev", None),
-                data.get("T",  None),
-                data.get("v",  None),
-                data.get("av", None),
-                data.get("op", None),
-                data.get("vw", None),
-                data.get("o",  None),
-                data.get("c",  None),
-                data.get("h",  None),
-                data.get("l",  None),
-                data.get("a",  None),
-                f'{datetime.fromtimestamp(data.get("e",  None)//1000)}',
-                f'{datetime.fromtimestamp(data.get("s",  None)//1000)}',
-                stream_type
-            ]
-        )
+    write( 
+        [
+            stream_type,
+            data.get("ev", None),
+            data.get("T",  None),
+            data.get("v",  None),
+            data.get("av", None),
+            data.get("op", None),
+            data.get("vw", None),
+            data.get("o",  None),
+            data.get("c",  None),
+            data.get("h",  None),
+            data.get("l",  None),
+            data.get("a",  None),
+            f'{datetime.fromtimestamp(data.get("e",  None)//1000)}',
+            f'{datetime.fromtimestamp(data.get("s",  None)//1000)}'
+        ]
+    )
 
-    else:
-        if data.get('error') or data.get('status') == 'unauthorized':
-            authorized = False
-            msg = f"Recieved Other Message:\n {res}"
-        elif data.get('status') == 'authorized':
-            authorized = True
-            msg = f"Stream Auth Success:\n {res}"
-    
-    print(msg)
-    return authorized
 
 
 def write(bar):

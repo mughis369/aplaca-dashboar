@@ -1,20 +1,12 @@
 class Config(object):
-    JOBS = [
-        {
-            'id': 'job-1',
-            'func': 'jobs:streamer',
-            'trigger': 'interval',
-            "seconds": 30,
-        }
-    ]
-
-    SCHEDULER_API_ELABLED=True
-
+    pass
+    
 class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
 
 class DebugConfig(Config):
+    APP_ENV = 'Development'
     DEBUG = True
     TESTING = True
 

@@ -1,6 +1,6 @@
 import requests
 import json
-from app import config
+import config
 
 
 def create_order(symbol, qty, side='buy', type='market', time_in_force='gtc'):

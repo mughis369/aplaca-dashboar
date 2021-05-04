@@ -1,7 +1,7 @@
-from app import api, config, record
+from app import api, record
 import os
-from werkzeug.datastructures import ImmutableMultiDict
 import json
+import config
 
 def get_last_update():
     if os.path.isfile('.check'):

@@ -1,9 +1,24 @@
 #!/usr/bin/env python3
 
 from flask import Flask, render_template, request, url_for, redirect
-from flask_apscheduler import APScheduler
-from app import utils, config, record, stream
+from app import utils, record, stream
+import config
 import logging
+
+
+import threading
+class StreamThread(threading.Thread):
+
+     def run(self):
+          logging.info("Stream system thread")
+
+          try:
+               while 1:
+                   stream.start()
+                   time.sleep(1)
+          except KeyboardInterrupt:
+               GPIO.cleanup()
+
 
 
 def create_app():
@@ -12,9 +27,7 @@ def create_app():
     
     app = Flask(__name__)
     app.config.from_object(config.PRODUCTION_CONFIG)
-    scheduler = APScheduler()
-    scheduler.init_app(app)
-    scheduler.start()
+    StreamThread().start()
 
     # region routes
 
@@ -50,8 +63,9 @@ def create_app():
             return render_template('table.html', headers=header, table=records, last_update=last_update)
         else:
             return "Undefined header recieved"
-
     # endregion
+
+
     return app
 
 
